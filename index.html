@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AlonTECH | IoT Flood Monitoring</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9f9f9;
+      color: #333;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 10%;
+      background: white;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    header strong {
+      font-size: 24px;
+      color: #2c6e2f;
+    }
+
+    nav a {
+      margin: 0 15px;
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    nav a:hover {
+      color: #2c6e2f;
+    }
+
+    .cta-btn {
+      padding: 10px 20px;
+      background-color: #2c6e2f;
+      color: white;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .cta-btn:hover {
+      background-color: #1b4d26;
+    }
+
+    .hero {
+      height: 90vh;
+      background: url('hero-bg.png') no-repeat center center/cover;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding-left: 10%;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 0;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      padding: 40px;
+      border-radius: 10px;
+      max-width: 600px;
+    }
+
+    .hero-content h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+
+    .hero-content p {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+
+    .panel {
+      background: white;
+      padding: 30px 10%;
+      margin: 20px auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      border-radius: 10px;
+    }
+
+    .panel ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .panel li {
+      margin-bottom: 10px;
+    }
+
+    #map {
+      height: 400px;
+      width: 100%;
+      margin-top: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    footer {
+      background-color: #2c6e2f;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      nav {
+        margin: 10px 0;
+      }
+
+      .hero {
+        padding-left: 5%;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .hero-content {
+        padding: 20px;
+      }
+
+      .hero-content h1 {
+        font-size: 32px;
+      }
+
+      .panel {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <header>
+    <strong>Alontech</strong>
+    <nav>
+      <a href="#about">About</a>
+      <a href="live.html">Live Status</a>
+      <a href="contact.html">How It Works</a>
+      <a href="cone.html">Contact</a>
+      <a href="account.html" class="cta-btn">Create Account</a>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>HURRY! GET REAL-TIME FLOOD ALERTS</h1>
+      <p>Protecting lives and communities with smart, real-time flood risk monitoring.</p>
+      <a class="cta-btn" href="#live-dashboard">Check Live Status</a>
+    </div>
+  </section>
+
+  <!-- About the System -->
+  <section class="panel" id="about">
+    <h2>About the System</h2>
+    <p>Floods can happen quickly and without warning, putting lives, homes, and communities at risk...</p>
+    <ul>
+      <li>🌐 Real-time water level and rainfall monitoring.</li>
+      <li>📈 Intelligent flood prediction models.</li>
+      <li>🚨 Instant multi-channel alert systems (SMS, email, sirens).</li>
+    </ul>
+  </section>
+
+  <!-- Live Status Overview -->
+  <section class="panel" id="live-dashboard">
+    <h2>Live Status Overview</h2>
+    <p><strong>Active Sensors:</strong> 23 Sensors Online</p>
+    <p><strong>Current Risk Level:</strong> <span style="color: green;">Normal</span></p>
+    <p><strong>Last Update:</strong> 2 minutes ago</p>
+    <a href="#realtime-data">View Sensor Map</a>
+    <div id="map"></div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="contact">
+    <p>&copy; 2025 IoT Flood Monitoring Project | All Rights Reserved</p>
+    <p>Contact Us: info@floodmonitoring.com</p>
+  </footer>
+
+  <script>
+    const map = L.map('map').setView([8.1414, 124.2372], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+    L.marker([8.1414, 124.2372]).addTo(map)
+      .bindPopup('Iligan City Sensor Station')
+      .openPopup();
+  </script>
+
+</body>
+</html>

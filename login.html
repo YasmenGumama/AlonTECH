@@ -1,0 +1,57 @@
+<!-- login.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login | Alontech</title>
+ <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 50px;
+      background: #f4f4f4;
+      margin: 0;
+    }
+    form {
+      max-width: 400px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    input, button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+      font-size: 16px;
+    }
+    input:focus, button:focus {
+      outline: none;
+      border-color: #2c6e2f;
+    }
+    button {
+      background: #2c6e2f;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #1b4d26;
+    }
+  </style>
+</head>
+<body>
+  <form method="POST" action="login.php">
+    <h2 style="text-align:center;">Login</h2>
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="password" name="password" placeholder="Password" required>
+    <button type="submit">Login</button>
+  </form>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FloodSense</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 100px;
+      background-color: #f0f8ff;
+      position: relative;
+    }
+
+    h1 {
+      color: #004080;
+    }
+
+    #liveStatusBtn {
+      padding: 15px 30px;
+      font-size: 18px;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .safe {
+      background-color: green;
+    }
+
+    .caution {
+      background-color: orange;
+    }
+
+    .danger {
+      background-color: red;
+    }
+
+    /* Style for home arrow button */
+    #homeBtn {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 20px;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      color: #004080;
+    }
+
+    #homeBtn:hover {
+      color: #00bfff;
+    }
+  </style>
+</head>
+<body>
+
+  <button id="homeBtn" onclick="goHome()">Home</button>
+
+  <h1>Welcome to FloodSense</h1>
+  <p>Real-time flood detection and alerts powered by IoT.</p>
+
+  <button id="liveStatusBtn" class="safe" onclick="redirectToStatus()">Live Status: Safe</button>
+
+  <script>
+    function goHome() {
+      window.location.href = "index.html"; // Redirect to your home page
+    }
+
+    function redirectToStatus() {
+      window.location.href = "live-status.html"; // Update this to your actual page
+    }
+
+    // Cycle through statuses
+    const statusList = [
+      { class: 'safe', label: 'Safe' },
+      { class: 'caution', label: 'Caution' },
+      { class: 'danger', label: 'Danger' }
+    ];
+
+    let currentIndex = 0;
+    setInterval(() => {
+      const btn = document.getElementById('liveStatusBtn');
+      btn.className = statusList[currentIndex].class;
+      btn.textContent = 'Live Status: ' + statusList[currentIndex].label;
+      currentIndex = (currentIndex + 1) % statusList.length;
+    }, 5000); // Changes every 5 seconds
+  </script>
+
+</body>
+</html>
